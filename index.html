@@ -42,7 +42,7 @@
         $("#chatLogs").append("<div>" + text + "</div>");
       }
 
-      $("form").submit(function (e) {
+      $("#sendButton").click(function (e) {
         var message = $("#msgForm").val();
         var selectRoom = $("#roomid").val();
         $("#msgForm").val("");
@@ -65,8 +65,12 @@
 
       function changeLabel() {
         $(".nameLabel").text("メッセージ：");
-        $("#rooms").prop("disabled", true);
+        $("#roomid").hide();
+        $(".roomLabel").hide();
         $("button").text("送信");
+        $(".form-inline").append(
+          ' <button type="submit" class="btn btn-primary" id="sendButton">退室</button>'
+        );
         isEnter = true;
       }
     </script>

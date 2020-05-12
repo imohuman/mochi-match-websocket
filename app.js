@@ -17,7 +17,7 @@ var io = socketio.listen(server);
 io.sockets.on("connection", function (socket) {
   var room = "";
   var name = "";
-
+  var id = socket.id;
   // roomへの入室は、「socket.join(room名)」
   socket.on("client_to_server_join", function (data) {
     room = data.value;
@@ -30,16 +30,15 @@ io.sockets.on("connection", function (socket) {
   });
   // S07. client_to_server_broadcastイベント・データを受信し、送信元以外に送信する
   socket.on("client_to_server_broadcast", function (data) {
-    socket.broadcast.to(room).emit("server_to_client", { value: data.value });
+    socket.broadcast.to(room).emit("server_to_client", { value: id });
   });
   // S08. client_to_server_personalイベント・データを受信し、送信元のみに送信する
   socket.on("client_to_server_personal", function (data) {
-    var id = socket.id;
     name = data.value;
     var personalMessage = "あなたは、" + name + "さんとして入室しました。";
     io.to(id).emit("server_to_client", { value: personalMessage });
   });
-  // S09. dicconnectイベントを受信し、退出メッセージを送信する
+  // S09. disconnectイベントを受信し、退出メッセージを送信する
   socket.on("disconnect", function () {
     if (name == "") {
       console.log("未入室のまま、どこかへ去っていきました。");
