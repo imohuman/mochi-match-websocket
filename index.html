@@ -30,9 +30,16 @@
     </div>
 
     <script type="text/javascript">
-      var socket = io.connect(); // C02. ソケットへの接続
+      var socket = io("http://localhost:3000", {
+        query:
+          "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjU1MDIxOTAsImlhdCI6MTU4OTUwMjE5MH0.ab9At4opzgbSEMdQUhoxATwvrXHmk2TZQ3dqIHsQ6Jc",
+      });
       var isEnter = false;
       var name = "";
+
+      socket.on("error", (error) => {
+        console.log(error);
+      });
 
       // C04. server_to_clientイベント・データを受信する
       socket.on("server_to_client", function (data) {
