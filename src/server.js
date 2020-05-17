@@ -1,16 +1,14 @@
-var http = require("http");
-var socketio = require("socket.io");
-var socketioJwt = require("socketio-jwt");
-var fs = require("fs");
+const http = require("http");
+const express = require("express");
+const socketio = require("socket.io");
+const socketioJwt = require("socketio-jwt");
+const cors = require("cors");
 
-var server = http
-  .createServer(function (req, res) {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.end(fs.readFileSync("index.html", "utf-8"));
-  })
-  .listen(3000);
+const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
 
-var io = socketio.listen(server);
+app.use(cors());
 
 io.use(
   socketioJwt.authorize({
@@ -26,6 +24,7 @@ io.sockets.on("connection", function (socket) {
 
   socket.on("join_req", function (data) {
     // todo
+    socket.emit("asd", { a: "aa" });
   });
 
   socket.on("send_message", function (data) {
@@ -36,3 +35,7 @@ io.sockets.on("connection", function (socket) {
     // todo
   });
 });
+
+server.listen(process.env.PORT || 5000, () =>
+  console.log(`Server has started.`)
+);
