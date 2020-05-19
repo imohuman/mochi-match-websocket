@@ -10,12 +10,13 @@ const io = socketio(server);
 
 app.use(cors());
 
-var chat = io.of("/chat").on("connection", function (socket) {
+var chat = io.of("/chatroom").on("connection", function (socket) {
   socket.on("join_req", function (data) {
     // todo
+    socket.emit("asd", { a: "aa" });
   });
 
-  socket.on("send_message", function (data) {
+  socket.on("send_chat", function (data) {
     // todo
   });
 
