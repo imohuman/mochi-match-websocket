@@ -25,14 +25,6 @@ var chat = io.of("/chatroom").on("connection", function (socket) {
   });
 });
 
-// auth setting
-chat.use(
-  socketioJwt.authorize({
-    secret: "keyData",
-    handshake: true,
-  })
-);
-
 server.listen(process.env.PORT || 5000, () =>
   console.log(`Server has started.`)
 );
