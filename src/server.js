@@ -10,21 +10,9 @@ const io = socketio(server);
 
 app.use(cors());
 
-io.use(
-  socketioJwt.authorize({
-    secret: "keyData",
-    handshake: true,
-  })
-);
-
-io.sockets.on("connection", function (socket) {
-  var room = "";
-  var name = "";
-  var id = socket.id;
-
+var chat = io.of("/chat").on("connection", function (socket) {
   socket.on("join_req", function (data) {
     // todo
-    socket.emit("asd", { a: "aa" });
   });
 
   socket.on("send_message", function (data) {
@@ -35,6 +23,14 @@ io.sockets.on("connection", function (socket) {
     // todo
   });
 });
+
+// auth setting
+chat.use(
+  socketioJwt.authorize({
+    secret: "keyData",
+    handshake: true,
+  })
+);
 
 server.listen(process.env.PORT || 5000, () =>
   console.log(`Server has started.`)
