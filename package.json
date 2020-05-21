@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "cors": "^2.8.5",
+    "drakov": "^1.0.4",
     "express": "^4.17.1",
     "socket.io": "^2.3.0",
     "socketio-jwt": "^4.5.0"
@@ -12,7 +13,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/server.js"
+    "start": "node ./src/server.js",
+    "mock": "drakov -p 8080 -f mock.apib --public"
   },
   "repository": {
     "type": "git",

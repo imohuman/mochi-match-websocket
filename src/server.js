@@ -12,8 +12,7 @@ app.use(cors());
 
 var chat = io.of("/chatroom").on("connection", function (socket) {
   socket.on("join_req", function (data) {
-    // todo
-    socket.emit("asd", { a: "aa" });
+    console.log(data.details.user_id);
   });
 
   socket.on("send_chat", function (data) {
@@ -21,6 +20,7 @@ var chat = io.of("/chatroom").on("connection", function (socket) {
   });
 
   socket.on("disconnect", function (data) {
+    console.log(data);
     // todo
   });
 });
