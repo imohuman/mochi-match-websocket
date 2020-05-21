@@ -8,8 +8,8 @@ sample api
 ユーザーを任意のルームにジョインさせる
 
 + Parameters
-    + r_id: 1 (number) - roomの識別番号
-    + u_id: 1 (number) - userの識別番号
+    + r_id: 1 (number) - roomのID
+    + u_id: 1 (number) - userのID
 
 + Response 200 (application/json)
     + Body
@@ -19,26 +19,17 @@ sample api
         }
         ```
 
-## トークン発行 [POST /login]
-JWT認証用のトークンを発行する
+## ルームへの退室 [DELETE /v1/room/{r_id}/leave/{u_id}]
+ユーザーを任意のルームから退室させる
 
-+ Request (application/json)
-    + Attributes
-        + email: `oskamathis@gmail.com` (string, required)
-        + password: `1xU35jQy` (string, required)
++ Parameters
+    + r_id: 1 (number) - roomのID
+    + u_id: 1 (number) - userのID
 
 + Response 200 (application/json)
     + Body
         ```
         {
-            "error": "Unauthorized"
-        }
-        ```
-
-+ Response 401 (application/json)
-    + Body
-        ```
-        {
-            "error": "Unauthorized"
+            "message": "join success"
         }
         ```
