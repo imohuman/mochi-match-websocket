@@ -12,7 +12,16 @@ app.use(cors());
 
 var chat = io.of("/chatroom").on("connection", function (socket) {
   socket.on("join_req", function (data) {
-    // todo
+    //参加に必要な変数宣言
+    var user=data.userid;
+    var room=data.roomid;
+    var limit=data.roomlimit;
+    socket.join(room);
+    //一通り動くかチェック
+    console.log(user,room,limit);
+    console.log(io.sockets.adapter.rooms[room]);
+    //if(limit)
+    socket.join('room');
     socket.emit("asd", { a: "aa" });
   });
 
