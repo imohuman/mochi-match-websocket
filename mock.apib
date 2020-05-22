@@ -4,7 +4,7 @@ HOST: http://localhost
 # Sample API
 sample api
 
-## ルームへの参加 [POST /v1/room/{r_id}/join/{u_id}]
+## ルームへの参加 [POST /v1/room/{r_id}/entry/{u_id}]
 ユーザーを任意のルームにジョインさせる
 
 + Parameters
@@ -15,7 +15,7 @@ sample api
     + Body
         ```
         {
-            "message": "join success"
+            "message": "Successful entry."
         }
         ```
 
@@ -30,6 +30,6 @@ sample api
     + Body
         ```
         {
-            "message": "join success"
+            "message": "Successful exit."
         }
         ```
