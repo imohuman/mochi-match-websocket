@@ -1,0 +1,44 @@
+FORMAT: 1A
+HOST: http://localhost
+
+# Sample API
+sample api
+
+## ルームへの参加 [POST /v1/room/{r_id}/join/{u_id}]
+ユーザーを任意のルームにジョインさせる
+
++ Parameters
+    + r_id: 1 (number) - roomの識別番号
+    + u_id: 1 (number) - userの識別番号
+
++ Response 200 (application/json)
+    + Body
+        ```
+        {
+            "message": "join success"
+        }
+        ```
+
+## トークン発行 [POST /login]
+JWT認証用のトークンを発行する
+
++ Request (application/json)
+    + Attributes
+        + email: `oskamathis@gmail.com` (string, required)
+        + password: `1xU35jQy` (string, required)
+
++ Response 200 (application/json)
+    + Body
+        ```
+        {
+            "error": "Unauthorized"
+        }
+        ```
+
++ Response 401 (application/json)
+    + Body
+        ```
+        {
+            "error": "Unauthorized"
+        }
+        ```
