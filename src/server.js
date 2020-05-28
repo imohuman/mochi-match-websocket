@@ -11,12 +11,17 @@ const io = socketio(server);
 app.use(cors());
 
 var chat = io.of("/chatroom").on("connection", function (socket) {
+  //参加に必要な変数
+  var user="";
+  var room="";
   socket.on("join_req", function (data) {
-    console.log(data.details.user_id);
+    room = data.room_id;
+    socket.join(room);
+    socket.broadcast.to(room).emit("notify_entry", data);
   });
 
   socket.on("send_chat", function (data) {
-    // todo
+    var inMessage = user+"さんが入室しました。";
   });
 
   socket.on("disconnect", function (data) {
