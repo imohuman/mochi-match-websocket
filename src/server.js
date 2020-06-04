@@ -12,16 +12,27 @@ app.use(cors());
 
 var chat = io.of("/chatroom").on("connection", function (socket) {
   //参加に必要な変数
-  var user="";
-  var room="";
+  var user = socket.id;
+  var room = "";
   socket.on("join_req", function (data) {
+    console.log("join");
     room = data.room_id;
     socket.join(room);
     socket.broadcast.to(room).emit("notify_entry", data);
   });
 
+  socket.on("start_input", function (data) {
+    console.log("input start");
+    socket.broadcast.to(room).emit("user_input", { user: user });
+  });
+
+  socket.on("stop_input", function (data) {
+    console.log("stop input");
+    socket.broadcast.to(room).emit("user_input_stop", { user: user });
+  });
+
   socket.on("send_chat", function (data) {
-    var inMessage = user+"さんが入室しました。";
+    var inMessage = user + "さんが入室しました。";
   });
 
   socket.on("disconnect", function (data) {
