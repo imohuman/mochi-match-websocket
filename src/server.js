@@ -12,10 +12,12 @@ app.use(cors());
 
 var chat = io.of("/chatroom").on("connection", function (socket) {
   //参加に必要な変数
-  var user = socket.id;
+  var user = "";
   var room = "";
   socket.on("join_req", function (data) {
     console.log("join");
+    console.log(data);
+    user = data.user.user_name;
     room = data.room_id;
     socket.join(room);
     socket.broadcast.to(room).emit("notify_entry", data);
