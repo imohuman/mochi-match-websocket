@@ -2,18 +2,8 @@ const socketio = require("socket.io");
 const redis = require("redis");
 const fs = require("fs");
 
-let server;
-if (process.env.MODE == "production") {
-  let config = JSON.parse(fs.readFileSync("./config/config.json"));
-  let opts = {
-    key: fs.readFileSync(config.key),
-    cert: [fs.readFileSync(config.cert)],
-    ca: [fs.readFileSync(config.chain), fs.readFileSync(config.fullchain)],
-  };
-  server = require("https").createServer(opts);
-} else {
-  server = require("http").createServer();
-}
+const server = require("http").createServer();
+
 const io = socketio(server);
 io.set("heartbeat interval", 5000);
 io.set("heartbeat timeout", 15000);
@@ -32,7 +22,7 @@ sub.on("message", function (channel, message) {
   console.log(m);
   chat.to(room_id).emit("msg", message);
 });
-const chat = io.of("/ws/chatroom");
+const chat = io.of("chatroom");
 chat.on("connection", function (socket) {
   socket.on("join_req", function (data) {
     console.log("join");
