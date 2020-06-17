@@ -14,7 +14,6 @@ if (process.env.MODE == "production") {
 } else {
   server = require("http").createServer();
 }
-
 const io = socketio(server);
 io.set("heartbeat interval", 5000);
 io.set("heartbeat timeout", 15000);
