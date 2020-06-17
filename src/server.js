@@ -32,7 +32,6 @@ sub.on("message", function (channel, message) {
   console.log(m);
   chat.to(room_id).emit("msg", message);
 });
-
 const chat = io.of("/ws/chatroom");
 chat.on("connection", function (socket) {
   socket.on("join_req", function (data) {
