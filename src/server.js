@@ -1,43 +1,57 @@
 const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
-const socketioJwt = require("socketio-jwt");
+const redis = require("redis");
 const cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+io.set("heartbeat interval", 5000);
+io.set("heartbeat timeout", 15000);
 
 app.use(cors());
 
-var chat = io.of("/chatroom").on("connection", function (socket) {
-  //参加に必要な変数
-  var user = "";
-  var room = "";
+const sub = redis.createClient(
+  Number(process.env.REDIS_PORT) || 6379,
+  process.env.REDIS_HOST || "localhost"
+);
+sub.subscribe("channel_1");
+
+var user_name = "";
+var room_id = "";
+
+sub.on("message", function (channel, message) {
+  var m = JSON.parse(message);
+  console.log(m);
+  chat.to(room_id).emit("msg", message);
+});
+
+const chat = io.of("/chatroom");
+chat.on("connection", function (socket) {
   socket.on("join_req", function (data) {
     console.log("join");
     console.log(data);
-    user = data.user.user_name;
-    room = data.room_id;
+    user_name = data.user.user_name;
+    room_id = data.room_id;
     socket.join(room);
     socket.broadcast.to(room).emit("notify_entry", data);
   });
 
   socket.on("start_input", function (data) {
     console.log("input start");
-    socket.broadcast.to(room).emit("user_input", { user: user });
+    socket.broadcast
+      .to(room)
+      .emit("user_input_start", { user_name: user_name });
   });
 
   socket.on("stop_input", function (data) {
     console.log("stop input");
-    socket.broadcast.to(room).emit("user_input_stop", { user: user });
-  });
-
-  socket.on("send_chat", function (data) {
-    var inMessage = user + "さんが入室しました。";
+    socket.broadcast.to(room).emit("user_input_stop", { user_name: user_name });
   });
 
   socket.on("disconnect", function (data) {
+    socket.leave(room);
     console.log(data);
     // todo
   });
