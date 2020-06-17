@@ -29,20 +29,22 @@ chat.on("connection", function (socket) {
     console.log(data);
     user_name = data.user.user_name;
     room_id = data.room_id;
-    socket.join(room);
-    socket.broadcast.to(room).emit("notify_entry", data);
+    socket.join(room_id);
+    socket.broadcast.to(room_id).emit("notify_entry", data);
   });
 
   socket.on("start_input", function (data) {
     console.log("input start");
     socket.broadcast
-      .to(room)
+      .to(room_id)
       .emit("user_input_start", { user_name: user_name });
   });
 
   socket.on("stop_input", function (data) {
     console.log("stop input");
-    socket.broadcast.to(room).emit("user_input_stop", { user_name: user_name });
+    socket.broadcast
+      .to(room_id)
+      .emit("user_input_stop", { user_name: user_name });
   });
 
   socket.on("disconnect", function (data) {
