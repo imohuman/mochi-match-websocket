@@ -12,7 +12,6 @@ steps:
         from_secret: DOCKER_USERNAME
       password:
         from_secret: DOCKER_PASSWORD
-
   - name: deploy
     image: appleboy/drone-ssh
     settings:
