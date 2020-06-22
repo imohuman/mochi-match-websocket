@@ -1,6 +1,57 @@
 kind: pipeline
 name: default
 
+steps:
+  - name: publish
+    image: plugins/docker:18
+    settings:
+      dockerfile: ./Dockerfile
+      repo: taniwhy/mochi-match-websocket
+      tags: latest
+      username:
+        from_secret: DOCKER_USERNAME
+      password:
+        from_secret: DOCKER_PASSWORD
+
+  - name: deploy
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: SSH_HOST
+      username:
+        from_secret: SSH_USERNAME
+      password:
+        from_secret: SSH_PASSWORD
+      port: 22
+      script:
+        - cd /var/www/mochi-match
+        - sh deploy.sh
+  - name: discord notification
+    image: appleboy/drone-discord
+    when:
+      status: [success, failure]
+    settings:
+      username: close me
+      avatar_url: https://cdn.discordapp.com/attachments/719600379725217903/720465090289336380/20200601_161405.jpg
+      webhook_id:
+        from_secret: DISCORD_WEBHOCK_ID
+      webhook_token:
+        from_secret: DISCORD_WEBHOCK_TOKEN
+      message: >
+        {{#success build.status}}
+          ✅  Build #{{build.number}} `{{repo.name}}/{{commit.branch}}` Success
+
+          ``` {{commit.message}} ```
+
+          ✅ duration: {{duration build.started build.finished}}
+        {{else}}
+          ❌  Build #{{build.number}} `{{repo.name}}/{{commit.branch}}` Failed
+
+          ``` {{commit.message}} ```
+
+          ✅ duration: {{duration build.started build.finished}}
+        {{/success}}
+
 trigger:
   event:
     - push
