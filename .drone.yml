@@ -1,32 +1,6 @@
 kind: pipeline
 name: default
 
-steps:
-  - name: publish
-    image: plugins/docker:18
-    settings:
-      dockerfile: ./Dockerfile
-      repo: taniwhy/mochi-match-websocket
-      tags: latest
-      username:
-        from_secret: DOCKER_USERNAME
-      password:
-        from_secret: DOCKER_PASSWORD
-
-  - name: deploy
-    image: appleboy/drone-ssh
-    settings:
-      host:
-        from_secret: SSH_HOST
-      username:
-        from_secret: SSH_USERNAME
-      password:
-        from_secret: SSH_PASSWORD
-      port: 22
-      script:
-        - cd /var/www/mochi-match
-        - sh deploy.sh
-
 trigger:
   event:
     - push
