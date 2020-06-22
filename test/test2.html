@@ -8,7 +8,7 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
   </head>
   <body>
     <button id="join">参加</button><br />
@@ -16,51 +16,51 @@
     <button id="send">送信</button><br />
     <div id="inputlog"></div>
     <script type="text/javascript">
-      var socket = io.connect("http://localhost:5000/chatroom"); // C02. ソケットへの接続
+      var socket = io.connect('ws://mochi-match.work/chatroom'); // C02. ソケットへの接続
       var inputmember = [];
       var chattimeout;
 
       function timeout() {
         chattimeout = setTimeout(function () {
-          socket.emit("stop_input", { room_id: "test" });
+          socket.emit('stop_input', { room_id: 'test' });
         }, 3000);
       }
       function stoptimeout() {
         clearTimeout(chattimeout);
       }
 
-      $("#join").click(function () {
-        socket.emit("join_req", { room_id: "test" });
+      $('#join').click(function () {
+        socket.emit('join_req', { room_id: 'test' });
         return false;
       });
-      $("#chattext").keyup(function () {
-        socket.emit("start_input", { room_id: "test" });
+      $('#chattext').keyup(function () {
+        socket.emit('start_input', { room_id: 'test' });
         stoptimeout();
         timeout();
       });
-      $("#send").click(function () {
-        socket.emit("stop_input", { room_id: "test" });
+      $('#send').click(function () {
+        socket.emit('stop_input', { room_id: 'test' });
         stoptimeout();
       });
-      socket.on("notify_entry", function (data) {
+      socket.on('notify_entry', function (data) {
         console.log(data);
       });
-      socket.on("user_input", function (data) {
+      socket.on('user_input', function (data) {
         if (!inputmember.includes(data.user)) {
           inputmember.push(data.user);
           rendering();
         }
       });
-      socket.on("user_input_stop", function (data) {
+      socket.on('user_input_stop', function (data) {
         if (inputmember.includes(data.user)) {
           inputmember.splice(inputmember.indexOf(data.user), 1);
           rendering();
         }
       });
       function rendering() {
-        $("#inputlog").empty();
+        $('#inputlog').empty();
         for (m in inputmember) {
-          $("#inputlog").append("<div>" + m + "さんが入力中" + "</div>");
+          $('#inputlog').append('<div>' + m + 'さんが入力中' + '</div>');
         }
       }
     </script>

@@ -3,6 +3,7 @@ const server = require('http').createServer();
 const io = socketio(server);
 io.set('heartbeat interval', 5000);
 io.set('heartbeat timeout', 15000);
+io.set('origins', '*:*');
 //const redis = require('redis');
 //const sub = redis.createClient(
 //  Number(process.env.REDIS_PORT) || 6379,
