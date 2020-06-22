@@ -3,7 +3,7 @@ const server = require('http').createServer();
 const io = socketio(server);
 io.set('heartbeat interval', 5000);
 io.set('heartbeat timeout', 15000);
-io.set('origins', '*:*');
+
 //const redis = require('redis');
 //const sub = redis.createClient(
 //  Number(process.env.REDIS_PORT) || 6379,
@@ -11,15 +11,14 @@ io.set('origins', '*:*');
 //);
 //sub.subscribe('channel_1');
 
-var user_name = '';
-var room_id = '';
-
 //sub.on('message', function (channel, message) {
 //  var m = JSON.parse(message);
 //  chat.to(room_id).emit('msg', m);
 //});
 const chat = io.of('chatroom');
 chat.on('connection', function (socket) {
+  var user_name = '';
+  var room_id = '';
   socket.on('join_req', function (data) {
     user_name = data.user.user_name;
     room_id = data.room_id;
