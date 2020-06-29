@@ -19,9 +19,12 @@ const chat = io.of('chatroom');
 chat.on('connection', function (socket) {
   var user_name = '';
   var room_id = '';
+  var user_id = '';
   socket.on('join_req', function (data) {
+    console.log(data);
     user_name = data.user.user_name;
     room_id = data.room_id;
+    user_id = data.user.user_id;
     socket.join(room_id);
     socket.broadcast.to(room_id).emit('notify_entry', data);
   });
@@ -41,9 +44,9 @@ chat.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function (data) {
-    socket.leave(room_id);
+    //socket.leave(room_id);
     console.log(data);
-    // todo
+      socket.broadcast.to(room_id).emit('notify_leave', { "user_id": user_id });
   });
 });
 
